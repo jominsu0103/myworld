@@ -1,6 +1,6 @@
 const userDao = require("../models/userDao");
-const throwError = require("../../utils/error");
-const auth = require("../../utils/auth");
+const throwError = require("../utils/error");
+const auth = require("../utils/auth");
 const nodemailer = require("nodemailer");
 const coolsms = require("coolsms-node-sdk");
 const mailPoster = nodemailer.createTransport({
@@ -53,8 +53,8 @@ const signIn = async (data) => {
   if (!isPasswordValid) {
     throwError("Entered password is not valid.", 400);
   }
-
-  const token = auth.generateToken(user[0].email, user[0].userId);
+  console.log(user);
+  const token = auth.generateToken(user[0].email, user[0].id);
 
   return {
     message: "LOG_IN_SUCCESS",
