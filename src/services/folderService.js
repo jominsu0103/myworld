@@ -5,7 +5,7 @@ const secretKey = process.env.SECRET_KEY;
 const makeFolder = async (req) => {
   const token = req.headers.authorization;
   console.log(`token : ${token}`);
-  const folderName = req.body.name;
+  const folderName = req.body.folderName;
   console.log(`folderName : ${folderName}`);
   const accessToken = auth.decoded(token, secretKey);
   console.log(accessToken);
@@ -22,18 +22,33 @@ const readFolder = async (req) => {
   const userId = accessToken.userId;
   const result = await folderDao.selectFolder(userId);
 
-  return { message: "FOLDER_READ_SUCCESS", result };
+  const processd = processData(result);
+
+  return processd;
+};
+
+const processData = (rawData) => {
+  const processedData = rawData.map((item) => {
+    return {
+      id: item.id,
+      userId: item.user_id,
+      folderName: item.name,
+      createdAt: new Date(item.created_at).toISOString(),
+    };
+  });
+
+  return processedData;
 };
 
 const updateFolder = async (req) => {
-  const folderName = req.body.folderName;
+  const oldFolderName = req.body.oldFolderName;
   const newFolderName = req.body.newFolderName;
   const token = req.headers.authorization;
   const accessToken = auth.decoded(token, secretKey);
   const userId = accessToken.userId;
   const result = await folderDao.updateFolder(
     userId,
-    folderName,
+    oldFolderName,
     newFolderName
   );
 
