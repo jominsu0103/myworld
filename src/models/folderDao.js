@@ -28,11 +28,11 @@ const selectFolder = async (userId) => {
   }
 };
 
-const updateFolder = async (userId, folderName, newFolderName) => {
+const updateFolder = async (userId, oldFolderName, newFolderName) => {
   try {
     const result = await appDataSource.query(
       `UPDATE folder SET name = ? WHERE user_id = ? AND name = ?`,
-      [newFolderName, userId, folderName]
+      [newFolderName, userId, oldFolderName]
     );
     return result;
   } catch (error) {

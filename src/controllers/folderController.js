@@ -13,7 +13,7 @@ const makeFolder = async (req, res) => {
 const readFolder = async (req, res) => {
   try {
     const readFolderResult = await folderService.readFolder(req);
-    res.status(200).json(readFolderResult);
+    res.status(200).json({ message: "read success", data: readFolderResult });
   } catch (error) {
     console.error(error);
     res.status(error.statusCode || 500).json({ message: error.message });
