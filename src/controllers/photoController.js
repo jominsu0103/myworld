@@ -2,6 +2,7 @@ const photoService = require("../services/photoService");
 
 const uploadPhoto = async (req, res) => {
   try {
+    console.log(req.file);
     const uploadPhotoResult = await photoService.uploadPhoto(req);
     res.status(201).json(uploadPhotoResult);
   } catch (error) {
@@ -13,7 +14,8 @@ const uploadPhoto = async (req, res) => {
 const totalPhoto = async (req, res) => {
   try {
     const totalPhotoResult = await photoService.totalPhoto(req);
-    res.status(200).json(totalPhotoResult);
+    console.log(totalPhotoResult);
+    res.status(200).json({ message: "read success", data: totalPhotoResult });
   } catch (error) {
     console.error(error);
     res.status(error.statusCode || 500).json({ message: error.message });
