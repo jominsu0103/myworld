@@ -1,12 +1,18 @@
 const appDataSource = require("./dataSource");
 
-const insertPhoto = async (userId, photoURL, photoName, folderId) => {
+const insertPhoto = async (
+  userId,
+  photoURL,
+  photoName,
+  folderId,
+  photoFileName
+) => {
   try {
     const result = await appDataSource.query(
       `
-      INSERT INTO photo (user_id , photo , photo_content , folder_id) VALUES (?,?,?,?);
+      INSERT INTO photo (user_id , photo , photo_content , folder_id , photo_file_name) VALUES (?,?,?,?,?);
       `,
-      [userId, photoURL, photoName, folderId]
+      [userId, photoURL, photoName, folderId, photoFileName]
     );
     return result;
   } catch (error) {

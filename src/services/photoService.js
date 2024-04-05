@@ -4,15 +4,22 @@ const secretKey = process.env.SECRET_KEY;
 
 const uploadPhoto = async (req) => {
   const token = req.headers.authorization;
-  const { folderId, photoURL, photoName } = req.body;
+  const { folderId, photoName } = req.body;
+
+  const photoURL = req.file.path;
+  const photoFileName = req.file.filename;
   const accessToken = auth.decoded(token, secretKey);
   const userId = accessToken.userId;
+  console.log(
+    `folderID : ${folderId}, photoURL : ${photoURL} , photoName : ${photoName}`
+  );
 
   const result = await photoDao.insertPhoto(
     userId,
     photoURL,
     photoName,
-    folderId
+    folderId,
+    photoFileName
   );
 
   return { message: "PHOTO_UPLOAD_SUCCESS", result };
@@ -25,7 +32,7 @@ const totalPhoto = async (req) => {
 
   const result = await photoDao.selectPhoto(userId);
 
-  return { message: "PHOTO_RELOAD_SUCCESS", result };
+  return result;
 };
 
 const removePhoto = async (req) => {
