@@ -3,6 +3,7 @@ const throwError = require("../utils/error");
 const auth = require("../utils/auth");
 const nodemailer = require("nodemailer");
 const coolsms = require("coolsms-node-sdk");
+const redisClient = require("../utils/redis");
 const mailPoster = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: process.env.MAIL_PORT,
@@ -54,13 +55,17 @@ const signIn = async (data) => {
     throwError("Entered password is not valid.", 400);
   }
   console.log(user);
-  const token = auth.generateToken(user[0].email, user[0].id);
+  const accessToken = auth.generateToken(user[0]);
+  const refreshToken = auth.refresh();
+
+  await redisClient.set(user[0].id.toString(), refreshToken);
 
   return {
     message: "LOG_IN_SUCCESS",
-    token: token,
-    email: user[0].email,
-    userId: user[0].id,
+    data: {
+      accessToken,
+      refreshToken,
+    },
   };
 };
 
