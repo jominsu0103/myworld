@@ -1,12 +1,14 @@
 const redis = require("redis");
 
+const REDIS_HOST = process.env.REDIS_HOST;
 const REDIS_PORT = parseInt(process.env.REDIS_PORT);
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
 
 // Redis 클라이언트 생성
 const redisClient = redis.createClient({
-  host: "127.0.0.1",
-  port: 6379, // .env 파일에서 가져오는 옵션
-  password: "123456",
+  host: REDIS_HOST,
+  port: REDIS_PORT, // .env 파일에서 가져오는 옵션
+  password: REDIS_PASSWORD,
 });
 
 redisClient.connect();
