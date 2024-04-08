@@ -3,14 +3,9 @@ const auth = require("../utils/auth");
 const secretKey = process.env.SECRET_KEY;
 
 const makeFolder = async (req) => {
-  const token = req.headers.authorization;
-  console.log(`token : ${token}`);
   const folderName = req.body.folderName;
-  console.log(`folderName : ${folderName}`);
-  const accessToken = auth.decoded(token, secretKey);
-  console.log(accessToken);
-  const userId = accessToken.userId;
-  console.log(`userId : ${userId}`);
+  const userId = req.id;
+  console.log(`folder: ${folderName} , userId: ${userId}`);
   const result = await folderDao.insertFolder(folderName, userId);
 
   return { message: "FOLDER_ADD_SUCCESS", result };
