@@ -46,8 +46,18 @@ const removePhoto = async (req) => {
   return { message: "PHOTO_DELETE_SUCCESS", result };
 };
 
+const incrementScrapCount = async (req) => {
+  const photoId = req.params.photoId;
+  console.log(`photoId: ${photoId}`);
+
+  const result = await photoDao.incrementScrapCountInDB(photoId);
+
+  return result;
+};
+
 module.exports = {
   uploadPhoto,
   totalPhoto,
   removePhoto,
+  incrementScrapCount,
 };

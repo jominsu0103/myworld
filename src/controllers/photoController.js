@@ -32,8 +32,24 @@ const removePhoto = async (req, res) => {
   }
 };
 
+const incrementScrapCount = async (req, res) => {
+  try {
+    const incrementScrapResult = await photoService.incrementScrapCount(req);
+    res
+      .status(200)
+      .json({
+        message: "Scrap count increased successfully",
+        data: incrementScrapResult,
+      });
+  } catch (error) {
+    console.error(error);
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   uploadPhoto,
   totalPhoto,
   removePhoto,
+  incrementScrapCount,
 };

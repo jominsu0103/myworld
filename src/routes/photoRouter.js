@@ -1,5 +1,7 @@
 const express = require("express");
 const path = require("path");
+const authJWT = require("../middlewares/authJWT");
+const refreshJWT = require("../utils/refresh");
 const router = express.Router();
 const photoController = require("../controllers/photoController");
 const multer = require("multer");
@@ -18,5 +20,7 @@ router.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 router.post("/upload", upload.single("photo"), photoController.uploadPhoto);
 router.get("/", photoController.totalPhoto);
 router.delete("/", photoController.removePhoto);
+router.put("/:photoId", photoController.incrementScrapCount);
+router.get("/refresh", refreshJWT);
 
 module.exports.router = router;

@@ -49,8 +49,22 @@ const deletePhoto = async (userId, photoId) => {
   }
 };
 
+const incrementScrapCountInDB = async (photoId) => {
+  try {
+    const result = await appDataSource.query(
+      `UPDATE photo SET scrap = scrap + 1 WHERE id = ?`,
+      [photoId]
+    );
+    return result;
+  } catch (error) {
+    console.error("스크랩 수 증가 중 오류", error);
+    throw error;
+  }
+};
+
 module.exports = {
   insertPhoto,
   selectPhoto,
   deletePhoto,
+  incrementScrapCountInDB,
 };
