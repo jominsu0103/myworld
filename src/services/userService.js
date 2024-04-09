@@ -1,4 +1,5 @@
 const userDao = require("../models/userDao");
+const folderDao = require("../models/folderDao");
 const throwError = require("../utils/error");
 const auth = require("../utils/auth");
 const nodemailer = require("nodemailer");
@@ -40,6 +41,7 @@ const signUp = async (data) => {
 
 const signIn = async (data) => {
   const { email, password } = data;
+  const defaultFolderName = "기본 폴더";
 
   if (!email || !password) {
     throwError("INVALID_ATTEMPT", 400);
@@ -60,8 +62,10 @@ const signIn = async (data) => {
 
   await redisClient.set(user[0].id.toString(), refreshToken);
 
+  await folderDao.insertFolder(defaultFolderName, user[0].id);
+
   return {
-    message: "LOG_IN_SUCCESS",
+    message: "LOG_IN_SUCCESS , DEFAULT_FOLDER_CREATE_SUCCESS",
     data: {
       accessToken,
       refreshToken,
