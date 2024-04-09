@@ -17,8 +17,13 @@ const upload = multer({
 });
 router.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
-router.post("/upload", upload.single("photo"), photoController.uploadPhoto);
-router.get("/", photoController.totalPhoto);
+router.post(
+  "/upload",
+  upload.single("photo"),
+  authJWT,
+  photoController.uploadPhoto
+);
+router.get("/", authJWT, photoController.totalPhoto);
 router.delete("/", photoController.removePhoto);
 router.put("/:photoId", photoController.incrementScrapCount);
 router.get("/refresh", refreshJWT);

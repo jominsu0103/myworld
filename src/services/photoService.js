@@ -3,13 +3,11 @@ const auth = require("../utils/auth");
 const secretKey = process.env.SECRET_KEY;
 
 const uploadPhoto = async (req) => {
-  const token = req.headers.authorization;
   const { folderId, photoName } = req.body;
 
   const photoURL = req.file.path;
   const photoFileName = req.file.filename;
-  const accessToken = auth.decoded(token, secretKey);
-  const userId = accessToken.userId;
+  const userId = req.id;
   console.log(
     `folderID : ${folderId}, photoURL : ${photoURL} , photoName : ${photoName}`
   );
@@ -26,11 +24,14 @@ const uploadPhoto = async (req) => {
 };
 
 const totalPhoto = async (req) => {
-  const token = req.headers.authorization;
-  const accessToken = auth.decoded(token, secretKey);
-  const userId = accessToken.userId;
+  const userId = req.id;
+  const folderId = req.query.folderId;
+  let folderQuery = "";
+  if (folderId) {
+    folderQuery = `AND folder_id = ${folderId}`;
+  }
 
-  const result = await photoDao.selectPhoto(userId);
+  const result = await photoDao.selectPhoto(userId, folderQuery);
 
   return result;
 };

@@ -21,11 +21,11 @@ const insertPhoto = async (
   }
 };
 
-const selectPhoto = async (userId) => {
+const selectPhoto = async (userId, folderQuery) => {
   try {
     const result = await appDataSource.query(
       `
-    SELECT * FROM photo WHERE user_id = ?
+    SELECT * FROM photo WHERE user_id = ? ${folderQuery}
     `,
       [userId]
     );
