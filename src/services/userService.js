@@ -62,7 +62,19 @@ const signIn = async (data) => {
 
   await redisClient.set(user[0].id.toString(), refreshToken);
 
-  await folderDao.insertFolder(defaultFolderName, user[0].id);
+  console.log(user[0].id);
+
+  const folders = await folderDao.selectFolder(user[0].id);
+
+  const hasDefaultFolder = folders.some(
+    (folder) => folder.name === defaultFolderName
+  );
+
+  if (!hasDefaultFolder) {
+    await folderDao.insertFolder(defaultFolderName, user[0].id);
+  } else {
+    console.log("기본 폴더가 이미 생성되어있습니다.");
+  }
 
   return {
     message: "LOG_IN_SUCCESS , DEFAULT_FOLDER_CREATE_SUCCESS",
