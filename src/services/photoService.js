@@ -26,6 +26,7 @@ const uploadPhoto = async (req) => {
 const totalPhoto = async (req) => {
   const userId = req.id;
   const folderId = req.query.folderId;
+  console.log(`userID : ${userId}, folderID : ${folderId}`);
   let folderQuery = "";
   if (folderId) {
     folderQuery = `AND folder_id = ${folderId}`;
@@ -33,7 +34,39 @@ const totalPhoto = async (req) => {
 
   const result = await photoDao.selectPhoto(userId, folderQuery);
 
-  return result;
+  const processd = processData(result);
+
+  console.log(processd);
+
+  return processd;
+};
+
+const processData = (rawData) => {
+  const processedData = rawData.map((item) => {
+    return {
+      id: item.id,
+      folderId: item.folder_id,
+      photo: item.photo,
+      photoContent: item.photo_content,
+      photoFileName: item.photo_file_name,
+      scrap: item.scrap,
+      userId: item.user_id,
+      createdAt: formatDate(item.created_at),
+    };
+  });
+  return processedData;
+};
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${day}, ${hours}:${minutes}:${seconds}`;
 };
 
 const removePhoto = async (req) => {
@@ -48,7 +81,7 @@ const removePhoto = async (req) => {
 };
 
 const incrementScrapCount = async (req) => {
-  const photoId = req.params.photoId;
+  const photoId = req.query.photoId;
   console.log(`photoId: ${photoId}`);
 
   const result = await photoDao.incrementScrapCountInDB(photoId);
