@@ -25,7 +25,7 @@ router.post(
 );
 router.get("/", authJWT, photoController.totalPhoto);
 router.delete("/", photoController.removePhoto);
-router.put("/:photoId", photoController.incrementScrapCount);
+router.put("/", photoController.incrementScrapCount);
 router.get("/refresh", refreshJWT);
 
 module.exports.router = router;
