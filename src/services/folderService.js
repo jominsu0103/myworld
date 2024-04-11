@@ -12,9 +12,8 @@ const makeFolder = async (req) => {
 };
 
 const readFolder = async (req) => {
-  const token = req.headers.authorization;
-  const accessToken = auth.decoded(token, secretKey);
-  const userId = accessToken.userId;
+  const userId = req.id;
+  console.log(userId);
   const result = await folderDao.selectFolder(userId);
 
   const processd = processData(result);
@@ -38,13 +37,14 @@ const processData = (rawData) => {
 const updateFolder = async (req) => {
   const oldFolderName = req.body.oldFolderName;
   const newFolderName = req.body.newFolderName;
-  const token = req.headers.authorization;
-  const accessToken = auth.decoded(token, secretKey);
-  const userId = accessToken.userId;
+  const folderId = req.query.folderId;
+  console.log(`folderId: ${folderId}`);
+  const userId = req.id;
   const result = await folderDao.updateFolder(
     userId,
     oldFolderName,
-    newFolderName
+    newFolderName,
+    folderId
   );
 
   return { message: "FOLDER_UPDATE_SUCCESS", result };
@@ -52,9 +52,7 @@ const updateFolder = async (req) => {
 
 const deleteFolder = async (req) => {
   const folderName = req.body.folderName;
-  const token = req.headers.authorization;
-  const accessToken = auth.decoded(token, secretKey);
-  const userId = accessToken.userId;
+  const userId = req.id;
   const result = await folderDao.deleteFolder(userId, folderName);
 
   return { message: "FOLDER_DELETE_SUCCESS", result };
