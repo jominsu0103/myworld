@@ -44,7 +44,7 @@ const selectDiary = async (req) => {
 
 const updateDiary = async (req) => {
   const userId = req.id;
-  const diaryId = req.query.diaryId;
+  const diaryId = req.params.diaryId;
   const { newTitle, newContent } = req.body;
   const result = await diaryDao.updateDiary(
     newTitle,
@@ -58,7 +58,7 @@ const updateDiary = async (req) => {
 
 const deleteDiary = async (req) => {
   const userId = req.id;
-  const diaryId = req.query.diaryId;
+  const diaryId = req.params.diaryId;
   const result = await diaryDao.deleteDiary(userId, diaryId);
 
   return result;

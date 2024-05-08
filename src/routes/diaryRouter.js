@@ -6,8 +6,8 @@ const refreshJWT = require("../utils/refresh");
 
 router.post("/", authJWT, diaryController.insertDiary);
 router.get("/", authJWT, diaryController.selectDiary);
-router.put("/", authJWT, diaryController.updateDiary);
-router.delete("/", authJWT, diaryController.deleteDiary);
+router.put("/:diaryId", authJWT, diaryController.updateDiary);
+router.delete("/:diaryId", authJWT, diaryController.deleteDiary);
 router.get("/refresh", refreshJWT);
 
 module.exports.roter = router;
